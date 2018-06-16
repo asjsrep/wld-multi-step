@@ -120,9 +120,9 @@
 
         function showGroup() {
             $groups.
-            removeClass('wld-fieldgroup--active').
-            eq(currentStep).
-            addClass('wld-fieldgroup--active');
+                removeClass('wld-fieldgroup--active').
+                eq(currentStep).
+                addClass('wld-fieldgroup--active');
 
             if (currentStep === $groups.length - 1) {
                 $submit.text('Sign up');
@@ -136,19 +136,27 @@
         this.$el = $el;
         var $fields = $el.find('.wld-form__fields');
         var $submit = $el.find('.wld-form__actions button');
+        var version = $el.find('input[name=version]').attr('value');
 
         // wrap all fields in a field-group
         $el.find('.wld-field').wrap('<div class="wld-fieldgroup"></div>');
 
-        // add terms to the gender field
-        var $termsField = getFieldForElement($('[name=consentCheck]'));
-        var $genderField = getFieldForElement($('[name=gender]'));
-        $termsField.insertAfter($genderField);
-
-        // add t&c's to the gender field
-        var $privacyField = getFieldForElement($('[name=commsOptin]'));
-        var $passwordField = getFieldForElement($('[name=password]'));
-        $privacyField.insertAfter($passwordField);
+        // move the terms / email opt-in fields
+        if (version === '1.0.0' || version === '1.1.0') {
+            var $termsField = getFieldForElement($('[name=consentCheck]'));
+            var $genderField = getFieldForElement($('[name=gender]'));
+            $termsField.insertAfter($genderField);
+            var $privacyField = getFieldForElement($('[name=commsOptin]'));
+            var $passwordField = getFieldForElement($('[name=password]'));
+            $privacyField.insertAfter($passwordField);
+        } else {
+            var $termsField = getFieldForElement($('[name=consentCheck]'));
+            var $passwordField = getFieldForElement($('[name=password]'));
+            $termsField.insertAfter($passwordField); 
+            var $privacyField = getFieldForElement($('[name=commsOptin]'));
+            var $emailField = getFieldForElement($('[name=email]'));
+            $privacyField.insertAfter($emailField);
+        }
 
         // remove any empty field-groups
         $el.find('.wld-fieldgroup:empty').remove();
@@ -209,4 +217,3 @@
     };
 
 }(jQuery));
-
